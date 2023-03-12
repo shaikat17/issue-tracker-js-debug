@@ -1,6 +1,9 @@
 document.getElementById('issueInputForm').addEventListener('submit', submitIssue);
 
 function submitIssue(e) {
+
+  // prevent default loading
+  e.preventDefault() 
   const getInputValue = id => document.getElementById(id).value;
   const description = getInputValue('issueDescription');
   const severity = getInputValue('issueSeverity');
@@ -54,3 +57,7 @@ const fetchIssues = () => {
                               </div>`;
   }
 }
+
+
+
+// https://github.com/alamin015/issue-tracker/blob/main/main.js
