@@ -1,5 +1,8 @@
 document.getElementById('issueInputForm').addEventListener('submit', submitIssue);
 
+// issues array
+let issues = [];
+
 function submitIssue(e) {
 
   // prevent default loading
@@ -12,7 +15,9 @@ function submitIssue(e) {
   const status = 'Open';
 
   const issue = { id, description, severity, assignedTo, status };
-  let issues = [];
+
+  console.log(issue)
+  
   if (localStorage.getItem('issues')){
     issues = JSON.parse(localStorage.getItem('issues'));
   }
@@ -21,7 +26,6 @@ function submitIssue(e) {
 
   document.getElementById('issueInputForm').reset();
   fetchIssues();
-  e.preventDefault();
 }
 
 const closeIssue = id => {
@@ -39,7 +43,11 @@ const deleteIssue = id => {
 }
 
 const fetchIssues = () => {
-  const issues = JSON.parse(localStorage.getItem('issues'));
+  if (localStorage.getItem('issues')){
+    issues = JSON.parse(localStorage.getItem('issues'));
+  } else {
+    localStorage.setItem('issues', JSON.stringify(issues));
+  }
   const issuesList = document.getElementById('issuesList');
   issuesList.innerHTML = '';
 
