@@ -1,0 +1,7 @@
+.error {
+    border: 1px solid red;
+}
+
+input:focus.focus{
+    box-shadow: 1px 1px 10px rgba(255, 0, 21, 0.264);
+}

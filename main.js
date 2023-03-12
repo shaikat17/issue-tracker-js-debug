@@ -3,6 +3,7 @@ document
   .addEventListener("submit", submitIssue);
 
   let issues = [];
+  let validation = true;
 
 // get data from local storage
 function getLocalData() {
@@ -17,11 +18,34 @@ function saveToLocal() {
   localStorage.setItem("issues", JSON.stringify(issues));
 }
 
+
+// validation input form
+function validationForm(value, id) {
+  if(value.length < 1) {
+    document.getElementById(id).classList.add('error');
+    document.getElementById(id).focus();
+
+      // remove warning
+    setTimeout(() => {
+        document.getElementById(id).classList.remove("error");
+      }, 2000);
+     return false;
+  }
+  return true;
+}
+
 function submitIssue(e) {
   const getInputValue = (id) => document.getElementById(id).value;
+
   const description = getInputValue("issueDescription");
+  validation = validationForm(description, "issueDescription");
+
   const severity = getInputValue("issueSeverity");
+  validation = validationForm(severity, "issueSeverity");
+
   const assignedTo = getInputValue("issueAssignedTo");
+  validation = validationForm(assignedTo, "issueAssignedTo");
+
   const id = Math.floor(Math.random() * 100000000) + "";
   const status = "Open";
 
@@ -30,8 +54,12 @@ function submitIssue(e) {
   if (localStorage.getItem("issues")) {
     issues = JSON.parse(localStorage.getItem("issues"));
   }
-  issues.push(issue);
-  localStorage.setItem("issues", JSON.stringify(issues));
+
+  if(validation) {
+
+    issues.push(issue);
+    saveToLocal()
+  }
 
   document.getElementById("issueInputForm").reset();
   fetchIssues();
@@ -42,7 +70,7 @@ const closeIssue = (id) => {
   issues = getLocalData()
   let currentIssue = issues.find((issue) => issue.id === id);
   currentIssue.status = "Closed";
-  localStorage.setItem("issues", JSON.stringify(issues));
+  saveToLocal()
   fetchIssues();
 };
 
@@ -51,7 +79,7 @@ const deleteIssue = (id) => {
   const remainingIssues = issues.filter(issue => {
     return issue.id !== id
   });
-  console.log(remainingIssues)
+  // console.log(remainingIssues)
   localStorage.setItem("issues", JSON.stringify(remainingIssues));
 
   // fetchIssues
